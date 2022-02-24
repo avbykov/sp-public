@@ -1,3 +1,5 @@
+`use strict`;
+
 const express = require(`express`);
 const app = express();
 const bodyParser = require('body-parser');
@@ -11,9 +13,9 @@ app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(v1url, router);
 
-// process.on('SIGINT', () => disconnect());
-// process.on('SIGTERM', () => disconnect());
+// process.on('SIGINT', () => db.disconnect());
+// process.on('SIGTERM', () => db.disconnect());
 
 http.createServer(app).listen(process.env.org_enc_sp_resources_port, async () => {
-    db.connect();
+	db.connect();
 });
