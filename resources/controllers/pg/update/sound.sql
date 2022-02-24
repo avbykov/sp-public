@@ -1,0 +1,1 @@
+UPDATE "org.enc.sp".resources SET sound = $1, sound_name = $2 WHERE id = $3 AND locale = $4

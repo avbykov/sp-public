@@ -1,0 +1,1 @@
+INSERT INTO "org.enc.sp".resources (id, locale, description, image, image_name, sound, sound_name) VALUES ($1, $2, $3, $4, $5, $6, $7)
