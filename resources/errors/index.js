@@ -10,11 +10,11 @@ class ErrorData {
 		this.message = message;
 	}
 
-	getCode() {
+	get code() {
 		return this.code;
 	}
 
-	getMessage() {
+	get message() {
 		return this.message;
 	}
 }

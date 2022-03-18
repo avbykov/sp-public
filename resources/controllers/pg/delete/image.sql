@@ -1,1 +1,0 @@
-UPDATE "org.enc.sp".resources SET image = NULL, image_name = NULL WHERE id = $1 AND locale = $2

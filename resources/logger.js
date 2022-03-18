@@ -9,9 +9,8 @@ log4js.configure({
 		'file'   : { type: 'file', filename: 'logs/out.log' }
 	},
 	categories: {
-		default:  { appenders: [ 'stdout', 'file' ], level: 'info' }
-	},
-	enableCallStack: true
+		default:  { appenders: [ 'stdout', 'file' ], level: 'info', enableCallStack: true }
+	}
 });
 
 module.exports.logger = log4js.getLogger();
