@@ -254,7 +254,7 @@ const notFound = function (response) {
  */
 const internalServerError = function<T> (response, error: reason<T> | string) {
 	logger.error(error);
-	return typeof error === `string` ? response.status(500).send(error.toString()) : response.status(500).json(error).send();
+	return typeof error !== `object` ? response.status(500).send(error.toString()) : response.status(500).json(error).send();
 }
 
 export {router};

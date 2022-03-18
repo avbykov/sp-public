@@ -7,7 +7,7 @@ import { logger } from "./logger/Logger.js";
 import fs from "fs";
 
 
-const serviceName: string = JSON.parse(fs.readFileSync(`./package.json`, {encoding: "utf-8"})).name;
+const serviceName: string = JSON.parse(fs.readFileSync(`./package.json`, {encoding: `utf-8`})).name;
 const v1url: string = `/api/sp/regional-settings/v1`;
 const app = express();
 
@@ -18,9 +18,9 @@ app.use(v1url, router);
 const server = http.createServer(app);
 
 const terminate = () => {
-	dsLocator.acquire(process.env.org_enc_sp_regional_settings_ds).disconnect()
+	dsLocator.acquire(dsName).disconnect()
 		.then(() => {
-			logger.info(`Disconnected from ${process.env.org_enc_sp_regional_settings_ds}`);
+			logger.info(`Disconnected from ${dsName}`);
 			process.exit(1);
 		})
 		.catch(err => {
@@ -41,12 +41,12 @@ const dsName: string = process.env.org_enc_sp_regional_settings_ds;
 
 server.listen(port, async () => {
 	const ds = dsLocator.acquire(dsName);
-	let errorMessage = await ds.connect();
+	let errorMessage: string = await ds.connect();
 	const connectionAttempts: number = parseInt(process.env.org_enc_sp_regional_settings_ds_connection_attempts);
-	logger.info(`Starting '${serviceName}' service at ${port}, connecting to ${dsName}`);
-	for (let i = 0; i < connectionAttempts && errorMessage !== null; i++) {
+	logger.info(`'${serviceName}' service is starting at ${port}, connecting to ${dsName}`);
+	for (let i: number = 0; i < connectionAttempts && errorMessage !== null; i++) {
+		logger.warn(`${i + 1} of ${connectionAttempts} connection attempts failed with message '${errorMessage}', reconnecting...`);
 		errorMessage = await ds.connect();
-		logger.warn(`${i + 1} of ${connectionAttempts} connection attempts failed with message '${errorMessage}', reconnecting...`)
 	}
 	if (errorMessage) {
 		logger.error(`'${serviceName}' service failed to connect to ${dsName}, shutting down...`);
