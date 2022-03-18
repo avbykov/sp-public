@@ -1,6 +1,6 @@
 import {DS} from "../DS.js";
-import {Currency, Direction, RegionalSettings, RsParameters} from "../../model/Model.js";
-import {RegionalSettingsModel as rs} from "./Schemas.js";
+import {Currency, Direction, Locale, LParameters} from "../../model/Model.js";
+import {LocaleModel as rs} from "./Schemas.js";
 import pkg from "mongoose";
 
 const { connect, disconnect } = pkg;
@@ -16,9 +16,9 @@ export class MongoDs implements DS {
 
 	public exists = async (country: string): Promise<boolean> => rs.exists({country: country}).then(result => result !== null);
 
-	public read = async (country: string): Promise<RegionalSettings> => MongoDs.getValue(country, {_id: 0, __v: 0, 'currency._id': 0});
+	public read = async (country: string): Promise<Locale> => MongoDs.getValue(country, {_id: 0, __v: 0, 'currency._id': 0});
 
-	public create = async (parameters: RsParameters): Promise<string> => rs.create(new RegionalSettings(parameters)).toString();
+	public create = async (parameters: LParameters): Promise<string> => rs.create(new Locale(parameters)).toString();
 
 	public remove = async (country: string): Promise<number> => rs.deleteOne({country: country}).exec().then(r => r.deletedCount);
 
@@ -54,7 +54,7 @@ export class MongoDs implements DS {
 
 	public setNextLine = async (country: string, direction: Direction): Promise<boolean> => MongoDs.setValue(country, {nextLine: direction}).then(this.ok);
 
-	public connect = async (): Promise<string> => connect(process.env.org_enc_sp_regional_settings_mongo).then(() => null).catch(error => error.message);
+	public connect = async (): Promise<string> => connect(process.env.org_enc_sp_locales_mongo).then(() => null).catch(error => error.message);
 
 	public disconnect = async (): Promise<any> => disconnect();
 

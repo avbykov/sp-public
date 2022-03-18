@@ -1,5 +1,5 @@
 import {DS} from "../DS.js";
-import {Currency, Direction, RegionalSettings, RsParameters} from "../../model/Model.js";
+import {Currency, Direction, Locale, LParameters} from "../../model/Model.js";
 import {createClient} from "redis";
 
 export class RedisDs implements DS {
@@ -10,9 +10,9 @@ export class RedisDs implements DS {
 
 	public exists = (country: string): Promise<boolean> => this.read(country).then(result => result !== null);
 
-	public read = async (country: string): Promise<RegionalSettings> => this.client.json.get(country);
+	public read = async (country: string): Promise<Locale> => this.client.json.get(country);
 
-	public create = async (parameters: RsParameters) => this.client.json.set(parameters[0], `.`, new RegionalSettings(parameters));
+	public create = async (parameters: LParameters) => this.client.json.set(parameters[0], `.`, new Locale(parameters));
 
 	public remove = async (country: string): Promise<number> => this.client.json.del(country);
 
@@ -50,10 +50,10 @@ export class RedisDs implements DS {
 
 	public async connect(): Promise<string> {
 		this.client = createClient({
-			url: process.env.org_enc_sp_regional_settings_redis_url,
-			username: process.env.org_enc_sp_regional_settings_redis_username,
-			password: process.env.org_enc_sp_regional_settings_redis_password,
-			name: process.env.org_enc_sp_regional_settings_redis_db_name
+			url: process.env.org_enc_sp_locales_redis_url,
+			username: process.env.org_enc_sp_locales_redis_username,
+			password: process.env.org_enc_sp_locales_redis_password,
+			name: process.env.org_enc_sp_locales_redis_db_name
 		});
 		return this.client.connect().then(() => null).catch(error => error.message);
 	}

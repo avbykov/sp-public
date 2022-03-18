@@ -1,7 +1,7 @@
 {
-  "name": "regional-settings",
+  "name": "locales",
   "version": "1.0.0",
-  "description": "Regional Settings service",
+  "description": "Regional settings service",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {

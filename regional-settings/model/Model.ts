@@ -20,9 +20,9 @@ export enum Direction {
 	right = `right`
 }
 
-export type RsParameters = [string, string[], string, string[], string[], Currency, string, Direction?, Direction?];
+export type LParameters = [string, string[], string, string[], string[], Currency, string, Direction?, Direction?];
 
-export class RegionalSettings {
+export class Locale {
 
 	country: string;
 	languages: string[];
@@ -34,7 +34,7 @@ export class RegionalSettings {
 	lineDirection: Direction;
 	nextLine: Direction;
 
-	constructor(p: RsParameters) {
+	constructor(p: LParameters) {
 		this.country = p[0];
 		this.languages = p[1];
 		this.charset = p[2];

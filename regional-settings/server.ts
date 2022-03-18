@@ -8,7 +8,7 @@ import fs from "fs";
 
 
 const serviceName: string = JSON.parse(fs.readFileSync(`./package.json`, {encoding: `utf-8`})).name;
-const v1url: string = `/api/sp/regional-settings/v1`;
+const v1url: string = `/api/sp/locales/v1`;
 const app = express();
 
 app.use(bodyParser.json());
@@ -36,13 +36,13 @@ process.on(`SIGUSR2`, terminate);
 process.on(`uncaughtException`, terminate);
 
 
-const port: number = parseInt(process.env.org_enc_sp_regional_settings_port);
-const dsName: string = process.env.org_enc_sp_regional_settings_ds;
+const port: number = parseInt(process.env.org_enc_sp_locales_port);
+const dsName: string = process.env.org_enc_sp_locales_ds;
 
 server.listen(port, async () => {
 	const ds = dsLocator.acquire(dsName);
 	let errorMessage: string = await ds.connect();
-	const connectionAttempts: number = parseInt(process.env.org_enc_sp_regional_settings_ds_connection_attempts);
+	const connectionAttempts: number = parseInt(process.env.org_enc_sp_locales_ds_connection_attempts);
 	logger.info(`'${serviceName}' service is starting at ${port}, connecting to ${dsName}`);
 	for (let i: number = 0; i < connectionAttempts && errorMessage !== null; i++) {
 		logger.warn(`${i + 1} of ${connectionAttempts} connection attempts failed with message '${errorMessage}', reconnecting...`);

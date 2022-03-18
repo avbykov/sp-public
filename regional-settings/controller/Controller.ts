@@ -1,12 +1,12 @@
-import {Currency, Direction, RegionalSettings, RsParameters} from "../model/Model.js";
+import {Currency, Direction, Locale, LParameters} from "../model/Model.js";
 import {dsLocator} from "../ds/DsLocator.js";
 
-const ds = dsLocator.acquire(process.env.org_enc_sp_regional_settings_ds);
+const ds = dsLocator.acquire(process.env.org_enc_sp_locales_ds);
 
 const exists = async (country: string): Promise<boolean> => ds.exists(country);
 
 const add = {
-	regionalSettings: async (parameters: RsParameters): Promise<string> => ds.create(parameters)
+	locale: async (parameters: LParameters): Promise<string> => ds.create(parameters)
 };
 
 const put = {
@@ -21,7 +21,7 @@ const put = {
 };
 
 const get = {
-	regionalSettings: async (country: string): Promise<RegionalSettings> => ds.read(country),
+	locale: async (country: string): Promise<Locale> => ds.read(country),
 	languages: async (country: string): Promise<string[]> => ds.getLanguages(country),
 	charset: async (country: string): Promise<string> => ds.getCharset(country),
 	dateFormats: async (country: string): Promise<string[]> => ds.getDateFormats(country),
@@ -33,7 +33,7 @@ const get = {
 };
 
 const del = {
-	regionalSettings: async (country: string): Promise<number> => ds.remove(country)
+	locale: async (country: string): Promise<number> => ds.remove(country)
 };
 
 export {exists, add, put, get, del};

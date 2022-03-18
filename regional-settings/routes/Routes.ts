@@ -2,17 +2,17 @@ import Router from "express";
 import { add, del, exists, get, put } from "../controller/Controller.js";
 import * as validators from "../validators/Validators.js";
 import { logger } from "../logger/Logger.js";
-import { Currency, Direction, RegionalSettings } from "../model/Model.js";
+import { Currency, Direction, Locale } from "../model/Model.js";
 import { Validator } from "../validators/Validator.js";
 
 
 const router = Router();
 
 
-router.post(`/regional-settings`, async (req, res) => {
+router.post(`/locale`, async (req, res) => {
 		const rs = req.body;
 		if (await exists(rs.country)) {
-			badRequest(res, `Regional Settings for ${rs.country} already exists`);
+			badRequest(res, `locale for ${rs.country} already exists`);
 		} else {
 			validate(rs.country, validators.countryIsSpecified, validators.countryIsValid)
 				.then((country: string) => validate(rs.languages, validators.languagesAreSpecified, validators.languageIsValid)
@@ -23,7 +23,7 @@ router.post(`/regional-settings`, async (req, res) => {
 									.then((decimalSeparator: string) => validate(rs.currency, validators.currencyIsSpecified, validators.currencyIsValid)
 										.then((currency: Currency) => validateOptional(rs.lineDirection, validators.lineDirectionIsValid)
 											.then((lineDirection: string) => validateOptional(rs.nextLine, validators.nextLineIsValid)
-												.then((nextLine: string) => add.regionalSettings([
+												.then((nextLine: string) => add.locale([
 													country,
 													languages,
 													charset,
@@ -118,9 +118,9 @@ router.put(`/next-line`, async (req, res) => validate(req.query[`country`], vali
 			.catch((error: reason<string>) => badRequest<string>(res, error)))
 		.catch((error: reason<string>) => badRequest<string>(res, error)));
 
-router.get(`/regional-settings`, async (req, res) => validate(req.query[`country`], validators.countryIsSpecified, validators.countryIsValid)
-		.then((country: string) => get.regionalSettings(country)
-			.then((result: RegionalSettings) => result ? ok(res, result) : notFound(res))
+router.get(`/locale`, async (req, res) => validate(req.query[`country`], validators.countryIsSpecified, validators.countryIsValid)
+		.then((country: string) => get.locale(country)
+			.then((result: Locale) => result ? ok(res, result) : notFound(res))
 			.catch(error => internalServerError(res, error)))
 		.catch((error: reason<string>) => badRequest<string>(res, error)));
 
@@ -172,8 +172,8 @@ router.get(`/next-line`, async (req, res) => validate(req.query[`country`], vali
 			.catch(error => internalServerError(res, error)))
 		.catch((error: reason<string>) => badRequest<string>(res, error)));
 
-router.delete(`/regional-settings`, async (req, res) => validate(req.query[`country`], validators.countryIsSpecified, validators.countryIsValid)
-		.then((country: string) => del.regionalSettings(country)
+router.delete(`/locale`, async (req, res) => validate(req.query[`country`], validators.countryIsSpecified, validators.countryIsValid)
+		.then((country: string) => del.locale(country)
 			.then((result: number) => result > 0 ? ok(res, `Regional Settings for ${country} removed`) : notFound(res))
 			.catch(error => internalServerError(res, error)))
 		.catch((error: reason<string>) => badRequest<string>(res, error)));

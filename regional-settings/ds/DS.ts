@@ -1,12 +1,12 @@
-import {Currency, Direction, RegionalSettings, RsParameters} from '../model/Model.js';
+import {Currency, Direction, Locale, LParameters} from '../model/Model.js';
 
 interface DS {
 
 	exists(country: string): Promise<boolean>;
 
-	read(country: string): Promise<RegionalSettings>;
+	read(country: string): Promise<Locale>;
 
-	create(parameters: RsParameters): Promise<string>;
+	create(parameters: LParameters): Promise<string>;
 
 	remove(country: string): Promise<number>,
 

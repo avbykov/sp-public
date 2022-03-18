@@ -1,5 +1,5 @@
 import pkg from 'mongoose';
-import { Currency, Direction, RegionalSettings } from "../../model/Model.js";
+import { Currency, Direction, Locale } from "../../model/Model.js";
 import { errors } from "../../errors/Errors.js";
 import { ErrorData } from "../../errors/ErrorData.js";
 import { Validator } from "../../validators/Validator.js";
@@ -26,7 +26,7 @@ const CurrencySchema = new Schema<Currency>({
 	decimalLength: buildMongoValidator<NumberConstructor, string>(Number, validators.currencyDecimalLengthIsValid)
 }, {_id: false});
 
-const RegionalSettingsSchema = new Schema<RegionalSettings>({
+const LocaleSchema = new Schema<Locale>({
 	country: buildMongoValidator<StringConstructor, string>(String, validators.countryIsValid, errors.COUNTRY_NOT_SPECIFIED),
 	languages: buildMongoValidator<ArrayConstructor, string>(Array, validators.languageIsValid, errors.LANGUAGE_NOT_SPECIFIED),
 	charset: buildMongoValidator<StringConstructor, string>(String, validators.charsetIsValid, errors.CHARSET_NOT_SPECIFIED),
@@ -38,9 +38,9 @@ const RegionalSettingsSchema = new Schema<RegionalSettings>({
 	nextLine: <Direction>buildMongoValidator<StringConstructor, string>(String, validators.nextLineIsValid)
 });
 
-const RegionalSettingsModel = model(`RegionalSettings`, RegionalSettingsSchema, `data`);
-RegionalSettingsSchema.loadClass(RegionalSettings);
+const LocaleModel = model(`Locale`, LocaleSchema, `data`);
+LocaleSchema.loadClass(Locale);
 const CurrencyModel = model(`Currency`, CurrencySchema, `data`);
 CurrencySchema.loadClass(Currency);
 
-export {RegionalSettingsModel, CurrencyModel};
+export {LocaleModel, CurrencyModel};
