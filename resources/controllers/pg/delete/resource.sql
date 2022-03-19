@@ -1,0 +1,1 @@
+DELETE FROM "org.enc.sp".resources WHERE id = $1

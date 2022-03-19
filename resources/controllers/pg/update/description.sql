@@ -1,0 +1,1 @@
+UPDATE "org.enc.sp".resources SET description = $1 WHERE id = $2 AND locale = $3
