@@ -1,0 +1,17 @@
+docker build -t resources:1.0.0 .
+&& docker run
+-p host_port:app_port
+-v your_dir:/usr/resources/logs/
+--env org_enc_sp_resources_port=app_port
+--env org_enc_sp_resources_redis_url=
+--env org_enc_sp_resources_redis_username=
+--env org_enc_sp_resources_redis_password=
+--env org_enc_sp_resources_redis_db_name=
+--env org_enc_sp_resources_postgres_user=
+--env org_enc_sp_resources_postgres_password=
+--env org_enc_sp_resources_postgres_host=
+--env org_enc_sp_resources_postgres_port=
+--env org_enc_sp_resources_postgres_db_name=
+--env org_enc_sp_resources_ds_connection_attempts=
+--name resources
+resources:1.0.0 
