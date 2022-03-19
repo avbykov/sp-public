@@ -1,0 +1,14 @@
+docker build -t locales:1.0.0 .
+&& docker run
+-p 8081:app_port
+-v your_dir:/usr/locale/logs
+--env org_enc_sp_locales_port=app_port
+--env org_enc_sp_locales_redis_url=
+--env org_enc_sp_locales_redis_username=
+--env org_enc_sp_locales_redis_password=
+--env org_enc_sp_locales_redis_db_name=
+--env org_enc_sp_locales_mongo=mongo connection string
+--env org_enc_sp_locales_ds="mongo" or "redis"
+--env org_enc_sp_locales_ds_connection_attempts=
+--name locales
+locales:1.0.0
