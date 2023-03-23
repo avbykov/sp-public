@@ -169,7 +169,7 @@ router.delete(`/sound`, async (req, res) =>
  * @param value Value to be returned.
  */
 const ok = function (response, value) {
-	return typeof value !== `object` ? response.status(200).send(value.toString()) : response.status(200).json(value).send();
+	return typeof value !== `object` ? response.status(200).json(dataTemplate(value.toString())).send() : response.status(200).json(dataTemplate(value)).send();
 }
 
 /**
@@ -181,7 +181,7 @@ const ok = function (response, value) {
  */
 const badRequest = function (response, error) {
 	logger.error(error);
-	return typeof error !== `object` ? response.status(400).send(error.toString()) : response.status(400).json(error).send();
+	return typeof error !== `object` ? response.status(400).json(metaTemplate(error.toString())).send() : response.status(400).json(metaTemplate(error)).send();
 }
 
 /**
@@ -191,7 +191,7 @@ const badRequest = function (response, error) {
  * @param response Response object.
  */
 const notFound = function (response) {
-	return response.status(404).send();
+	return response.status(404).json(emptyTemplate()).send();
 }
 
 /**
@@ -203,7 +203,26 @@ const notFound = function (response) {
  */
 const internalServerError = function (response, error) {
 	logger.error(error);
-	return typeof error !== `object` ? response.status(500).send(error.toString()) : response.status(500).json(error).send();
+	return typeof error !== `object` ? response.status(500).json(metaTemplate(error.toString())).send() : response.status(500).json(metaTemplate(error)).send();
+}
+
+const responseTemplate = function (data, meta) {
+	return {
+		data: data,
+		meta: meta
+	};
+}
+
+const metaTemplate = function(meta) {
+	return responseTemplate("", meta);
+}
+
+const dataTemplate = function(data) {
+	return responseTemplate(data, "");
+}
+
+const emptyTemplate = function() {
+	return responseTemplate("", "");
 }
 
 /**
@@ -217,11 +236,12 @@ async function validate(value, ...validators) {
 	for (const element of [].concat(value)) {
 		const validator = validators.find((validator) => !validator.validate(element));
 		if (validator) {
+			const message = validator.message();
 			const reason = {
 				value: element,
-				code: validator.code,
-				message: validator.message,
-				description: validator.description
+				code: message.header().code(),
+				text: message.header().text(),
+				body: message.body()
 			};
 			logger.error(reason);
 			return Promise.reject(reason);

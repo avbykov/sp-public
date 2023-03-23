@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "removeComments": true,
-    "outDir": "dist",
+    "outDir": "./dist",
     "sourceMap": true,
     "moduleResolution": "Node",
     "esModuleInterop": true,
@@ -11,5 +11,7 @@
     "alwaysStrict": true,
     "resolveJsonModule": true
   },
-  "include": ["*.ts", "*/*.ts", "./package.json"]
+  "include": ["*.ts", "*/*.ts",
+    "./package.json"
+  ]
 }

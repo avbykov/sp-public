@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  pgresources:
+    image: postgres:14.1
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: resources
+      PGUSER: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "54320:5432"
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+      - ./resources/src/main/js/env/db/pg/schema.sql:/docker-entrypoint-initdb.d/0schema.sql
+      - ./resources/src/main/js/env/db/pg/entities.sql:/docker-entrypoint-initdb.d/1entities.sql
+  rsresources:
+    image: redis:6.0.9
+    restart: always
+    ports:
+      - "6379:6379"
+  resources:
+    depends_on:
+      pgresources:
+        condition: service_healthy
+      rsresources:
+        condition: service_started
+    build: resources/src/main/js
+    ports:
+      - "8081:8080"
+    environment:
+      org_enc_sp_resources_port: 8080
+      org_enc_sp_resources_redis_host: rsresources
+      org_enc_sp_resources_redis_port: 6379
+      org_enc_sp_resources_postgres_host: pgresources
+      org_enc_sp_resources_postgres_port: 5432
+      org_enc_sp_resources_postgres_user: postgres
+      org_enc_sp_resources_postgres_password: postgres
+      org_enc_sp_resources_postgres_db_name: resources
+      org_enc_sp_resources_ds_connection_attempts: 10
+    command: node server.js

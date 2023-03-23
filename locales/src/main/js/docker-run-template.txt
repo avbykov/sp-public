@@ -1,7 +1,7 @@
 docker build -t locales:1.0.0 .
 && docker run
--p 8081:app_port
--v your_dir:/usr/locale/logs
+-p host_port:app_port
+-v your_dir:/usr/locales/logs
 --env org_enc_sp_locales_port=app_port
 --env org_enc_sp_locales_redis_url=
 --env org_enc_sp_locales_redis_username=
